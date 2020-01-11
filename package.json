@@ -1,6 +1,6 @@
 {
 	"name": "@yushijinhun/skinview-utils",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "Utilities for working with Minecraft skins",
 	"main": "index.js",
 	"module": "index.js",
