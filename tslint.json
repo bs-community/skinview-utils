@@ -1,0 +1,20 @@
+{
+	"defaultSeverity": "error",
+	"extends": [
+		"tslint:latest"
+	],
+	"jsRules": {},
+	"rules": {
+		"max-line-length": false,
+		"indent": [
+			true,
+			"tabs"
+		],
+		"eofline": true,
+		"linebreak-style": [
+			true,
+			"LF"
+		]
+	},
+	"rulesDirectory": []
+}

@@ -1,0 +1,36 @@
+{
+	"name": "skinview-utils",
+	"version": "0.1.0",
+	"description": "Utilities for working with Minecraft skins",
+	"main": "index.js",
+	"module": "index.js",
+	"scripts": {
+		"build": "tsc",
+		"lint": "tslint index.ts",
+		"test": "npm run lint",
+		"prepublishOnly": "npm run build"
+	},
+	"devDependencies": {
+		"tslint": "^5.20.1",
+		"typescript": "^3.7.4"
+	},
+	"files": [
+		"index.ts",
+		"index.js"
+	],
+	"license": "MIT",
+	"author": "Haowei Wen <yushijinhun@gmail.com> (https://github.com/yushijinhun)",
+	"contributors": [
+		"Sean Boult <hacksore@mcskinsearch.com> (https://github.com/Hacksore)",
+		"Pig Fang <g-plane@hotmail.com> (https://github.com/g-plane)",
+		"Kent Rasmussen <hyprkookeez@gmail.com> (https://github.com/earthiverse)"
+	],
+	"homepage": "https://github.com/yushijinhun/skinview-utils#readme",
+	"bugs": {
+		"url": "https://github.com/yushijinhun/skinview-utils/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yushijinhun/skinview-utils.git"
+	}
+}
