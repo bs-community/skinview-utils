@@ -1,20 +1,15 @@
 {
-	"defaultSeverity": "error",
-	"extends": [
-		"tslint:latest"
-	],
-	"jsRules": {},
+	"extends": "tslint:latest",
 	"rules": {
 		"max-line-length": false,
+		"eofline": true,
 		"indent": [
 			true,
 			"tabs"
 		],
-		"eofline": true,
 		"linebreak-style": [
 			true,
 			"LF"
 		]
-	},
-	"rulesDirectory": []
+	}
 }
