@@ -2,7 +2,8 @@
 	"compilerOptions": {
 		"module": "es2015",
 		"target": "es5",
-		"strict": true
+		"strict": true,
+		"declaration": true
 	},
 	"include": [
 		"index.ts"

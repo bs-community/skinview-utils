@@ -15,7 +15,7 @@
 		"typescript": "^3.7.4"
 	},
 	"files": [
-		"index.ts",
+		"index.d.ts",
 		"index.js"
 	],
 	"license": "MIT",
