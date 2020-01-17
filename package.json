@@ -1,5 +1,5 @@
 {
-	"name": "@yushijinhun/skinview-utils",
+	"name": "skinview-utils",
 	"version": "0.1.0",
 	"description": "Utilities for working with Minecraft skins",
 	"main": "index.js",
@@ -37,12 +37,12 @@
 		"Pig Fang <g-plane@hotmail.com> (https://github.com/g-plane)",
 		"Kent Rasmussen <hyprkookeez@gmail.com> (https://github.com/earthiverse)"
 	],
-	"homepage": "https://github.com/yushijinhun/skinview-utils#readme",
+	"homepage": "https://github.com/bs-community/skinview-utils#readme",
 	"bugs": {
-		"url": "https://github.com/yushijinhun/skinview-utils/issues"
+		"url": "https://github.com/bs-community/skinview-utils/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/yushijinhun/skinview-utils.git"
+		"url": "git+https://github.com/bs-community/skinview-utils.git"
 	}
 }
