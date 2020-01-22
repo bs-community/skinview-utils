@@ -1,4 +1,4 @@
 declare module "*.png" {
-	let content: any;
+	let content: string;
 	export default content;
 }

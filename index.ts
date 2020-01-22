@@ -1,7 +1,7 @@
 export type TextureCanvas = HTMLCanvasElement | OffscreenCanvas;
 export type TextureSource = HTMLImageElement | HTMLVideoElement | ImageBitmap | TextureCanvas;
 
-function copyImage(context: CanvasImageData, sX: number, sY: number, w: number, h: number, dX: number, dY: number, flipHorizontal: boolean) {
+function copyImage(context: CanvasImageData, sX: number, sY: number, w: number, h: number, dX: number, dY: number, flipHorizontal: boolean): void {
 	const imgData = context.getImageData(sX, sY, w, h);
 	if (flipHorizontal) {
 		for (let y = 0; y < h; y++) {
@@ -33,7 +33,7 @@ function copyImage(context: CanvasImageData, sX: number, sY: number, w: number, 
 	context.putImageData(imgData, dX, dY);
 }
 
-function hasTransparency(context: CanvasImageData, x0: number, y0: number, w: number, h: number) {
+function hasTransparency(context: CanvasImageData, x0: number, y0: number, w: number, h: number): boolean {
 	const imgData = context.getImageData(x0, y0, w, h);
 	for (let x = 0; x < w; x++) {
 		for (let y = 0; y < h; y++) {
@@ -46,16 +46,16 @@ function hasTransparency(context: CanvasImageData, x0: number, y0: number, w: nu
 	return false;
 }
 
-function computeSkinScale(width: number) {
+function computeSkinScale(width: number): number {
 	return width / 64.0;
 }
 
-function fixOpaqueSkin(context: CanvasImageData & CanvasRect, width: number) {
+function fixOpaqueSkin(context: CanvasImageData & CanvasRect, width: number): void {
 	// Some ancient skins don't have transparent pixels (nor have helm).
 	// We have to make the helm area transparent, otherwise it will be rendered as black.
 	if (!hasTransparency(context, 0, 0, width, width / 2)) {
 		const scale = computeSkinScale(width);
-		const clearArea = (x: number, y: number, w: number, h: number) =>
+		const clearArea = (x: number, y: number, w: number, h: number): void =>
 			context.clearRect(x * scale, y * scale, w * scale, h * scale);
 		clearArea(40, 0, 8, 8); // Helm Top
 		clearArea(48, 0, 8, 8); // Helm Bottom
@@ -66,9 +66,9 @@ function fixOpaqueSkin(context: CanvasImageData & CanvasRect, width: number) {
 	}
 }
 
-function convertSkinTo1_8(context: CanvasImageData & CanvasRect, width: number) {
+function convertSkinTo1_8(context: CanvasImageData & CanvasRect, width: number): void {
 	const scale = computeSkinScale(width);
-	const copySkin = (sX: number, sY: number, w: number, h: number, dX: number, dY: number, flipHorizontal: boolean) =>
+	const copySkin = (sX: number, sY: number, w: number, h: number, dX: number, dY: number, flipHorizontal: boolean): void =>
 		copyImage(context, sX * scale, sY * scale, w * scale, h * scale, dX * scale, dY * scale, flipHorizontal);
 
 	fixOpaqueSkin(context, width);
@@ -87,7 +87,7 @@ function convertSkinTo1_8(context: CanvasImageData & CanvasRect, width: number) 
 	copySkin(52, 20, 4, 12, 44, 52, true); // Back Arm
 }
 
-export function loadSkinToCanvas(canvas: TextureCanvas, image: TextureSource) {
+export function loadSkinToCanvas(canvas: TextureCanvas, image: TextureSource): void {
 	let isOldFormat = false;
 	if (image.width !== image.height) {
 		if (image.width === 2 * image.height) {
@@ -113,7 +113,7 @@ export function loadSkinToCanvas(canvas: TextureCanvas, image: TextureSource) {
 	}
 }
 
-export function loadCapeToCanvas(canvas: TextureCanvas, image: TextureSource) {
+export function loadCapeToCanvas(canvas: TextureCanvas, image: TextureSource): void {
 	let isOldFormat = false;
 	if (image.width !== 2 * image.height) {
 		if (image.width * 17 === image.height * 22) {
@@ -181,7 +181,7 @@ export function isSlimSkin(canvas: TextureCanvas): boolean {
 
 	const scale = computeSkinScale(canvas.width);
 	const context = canvas.getContext("2d")!;
-	const checkArea = (x: number, y: number, w: number, h: number) =>
+	const checkArea = (x: number, y: number, w: number, h: number): boolean =>
 		hasTransparency(context, x * scale, y * scale, w * scale, h * scale);
 	return checkArea(50, 16, 2, 4) ||
 		checkArea(54, 20, 2, 12) ||

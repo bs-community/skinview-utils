@@ -1,12 +1,10 @@
-/// <reference path="shims.d.ts"/>
-
 import { expect } from "chai";
 import { isSlimSkin, loadSkinToCanvas } from "../index";
 
 import skin1_8Default from "./textures/skin-1.8-default-no_hd.png";
 import skin1_8Slim from "./textures/skin-1.8-slim-no_hd.png";
 import skinOldDefault from "./textures/skin-old-default-no_hd.png";
-import skinLegacyHatDefault from  "./textures/skin-legacyhat-default-no_hd.png";
+import skinLegacyHatDefault from "./textures/skin-legacyhat-default-no_hd.png";
 
 async function loadImage(src: string): Promise<HTMLImageElement> {
 	const image = document.createElement("img");
