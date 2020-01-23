@@ -30,7 +30,8 @@
 	},
 	"files": [
 		"index.d.ts",
-		"index.js"
+		"index.js",
+		"index.js.map"
 	],
 	"license": "MIT",
 	"author": "Haowei Wen <yushijinhun@gmail.com> (https://github.com/yushijinhun)",
