@@ -2,8 +2,8 @@
 	"name": "skinview-utils",
 	"version": "0.2.0",
 	"description": "Utilities for working with Minecraft skins",
+	"type": "module",
 	"main": "index.js",
-	"module": "index.js",
 	"scripts": {
 		"build": "tsc -p .",
 		"lint": "eslint . --ext .ts",
