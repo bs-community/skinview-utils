@@ -5,46 +5,18 @@ process.env.CHROME_BIN = require("puppeteer").executablePath();
 module.exports = function (config) {
 	config.set({
 		frameworks: ["mocha"],
-		files: [
-			"test/test.ts"
-		],
-		preprocessors: {
-			"test/test.ts": ["webpack"]
-		},
-		webpack: {
-			mode: "development",
-			module: {
-				rules: [
-					{
-						test: /\.png$/i,
-						loader: "url-loader"
-					},
-					{
-						test: /\.ts$/,
-						loader: "ts-loader",
-						options: {
-							transpileOnly: true
-						}
-					}
-				]
-			},
-			resolve: {
-				extensions: [".ts", ".js", ".json"]
-			}
-		},
-		webpackMiddleware: {
-			stats: "errors-only"
-		},
-		mime: {
-			"text/x-typescript": ["ts"]
-		},
-		browsers: ["ChromeHeadlessNoSandbox"],
-		customLaunchers: {
-			ChromeHeadlessNoSandbox: {
-				base: "ChromeHeadless",
-				flags: ["--no-sandbox"]
-			}
-		},
-		singleRun: true
+		files: [{ pattern: "test/test.ts", watched: false }],
+		preprocessors: { "**/*.ts": "rollup" },
+		browsers: ["ChromeHeadless"],
+		singleRun: true,
+		rollupPreprocessor: {
+			plugins: [
+				require("@rollup/plugin-typescript")(),
+				require("@rollup/plugin-image")(),
+				require("@rollup/plugin-node-resolve")(),
+				require("@rollup/plugin-commonjs")({ namedExports: { chai: ["expect"] } })
+			],
+			output: { format: "umd" }
+		}
 	});
 };
