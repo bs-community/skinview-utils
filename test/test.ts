@@ -1,3 +1,5 @@
+/// <reference path="shims.d.ts"/>
+
 import { expect } from "chai";
 import { isSlimSkin, loadSkinToCanvas } from "../src/index";
 

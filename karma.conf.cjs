@@ -1,4 +1,4 @@
-/* eslint-env node */
+/* eslint-disable */
 
 process.env.CHROME_BIN = require("puppeteer").executablePath();
 
