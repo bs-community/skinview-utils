@@ -1,7 +1,7 @@
 /// <reference path="shims.d.ts"/>
 
 import { expect } from "chai";
-import { isSlimSkin, loadSkinToCanvas } from "../src/index";
+import { inferModelType, loadSkinToCanvas } from "../src/index";
 
 import skin1_8Default from "./textures/skin-1.8-default-no_hd.png";
 import skin1_8Slim from "./textures/skin-1.8-slim-no_hd.png";
@@ -26,15 +26,15 @@ async function loadSkin(src: string) {
 
 describe("detect model of texture", () => {
 	it("1.8 default", async () =>
-		expect(isSlimSkin(await loadSkin(skin1_8Default))).to.equal(false)
+		expect(inferModelType(await loadSkin(skin1_8Default))).to.equal("default")
 	);
 
 	it("1.8 slim", async () =>
-		expect(isSlimSkin(await loadSkin(skin1_8Slim))).to.equal(true)
+		expect(inferModelType(await loadSkin(skin1_8Slim))).to.equal("slim")
 	);
 
 	it("old default", async () =>
-		expect(isSlimSkin(await loadSkin(skinOldDefault))).to.equal(false)
+		expect(inferModelType(await loadSkin(skinOldDefault))).to.equal("default")
 	);
 });
 

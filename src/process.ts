@@ -1,4 +1,4 @@
-import { TextureCanvas, TextureSource } from "./types.js";
+import { TextureCanvas, TextureSource, ModelType } from "./types.js";
 
 function copyImage(context: CanvasImageData, sX: number, sY: number, w: number, h: number, dX: number, dY: number, flipHorizontal: boolean): void {
 	const imgData = context.getImageData(sX, sY, w, h);
@@ -136,9 +136,7 @@ export function loadCapeToCanvas(canvas: TextureCanvas, image: TextureSource): v
 	context.drawImage(image, 0, 0, image.width, image.height);
 }
 
-export function isSlimSkin(canvas: TextureCanvas): boolean {
-	// Detects whether the skin is default or slim.
-	//
+export function inferModelType(canvas: TextureCanvas): ModelType {
 	// The right arm area of *default* skins:
 	// (44,16)->*-------*-------*
 	// (40,20)  |top    |bottom |
@@ -182,8 +180,10 @@ export function isSlimSkin(canvas: TextureCanvas): boolean {
 	const context = canvas.getContext("2d")!;
 	const checkArea = (x: number, y: number, w: number, h: number): boolean =>
 		hasTransparency(context, x * scale, y * scale, w * scale, h * scale);
-	return checkArea(50, 16, 2, 4) ||
+	const isSlim =
+		checkArea(50, 16, 2, 4) ||
 		checkArea(54, 20, 2, 12) ||
 		checkArea(42, 48, 2, 4) ||
 		checkArea(46, 52, 2, 12);
+	return isSlim ? "slim" : "default";
 }
