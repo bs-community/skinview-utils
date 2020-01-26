@@ -9,9 +9,10 @@
 		"strict": true,
 		"declaration": true,
 		"sourceMap": true,
-		"types": []
+		"types": [],
+		"outDir": "build"
 	},
 	"include": [
-		"index.ts"
+		"src"
 	]
 }

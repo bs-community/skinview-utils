@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { isSlimSkin, loadSkinToCanvas } from "../index";
+import { isSlimSkin, loadSkinToCanvas } from "../src/index";
 
 import skin1_8Default from "./textures/skin-1.8-default-no_hd.png";
 import skin1_8Slim from "./textures/skin-1.8-slim-no_hd.png";

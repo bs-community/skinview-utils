@@ -3,12 +3,12 @@
 	"version": "0.2.1",
 	"description": "Utilities for working with Minecraft skins",
 	"type": "module",
-	"main": "index.js",
+	"main": "build/index.js",
 	"scripts": {
 		"build": "tsc -p .",
-		"lint": "eslint . --ext .ts",
+		"lint": "eslint --ext .ts src",
 		"test": "npm run lint && karma start karma.conf.cjs",
-		"prepublishOnly": "npm run build"
+		"prepublishOnly": "rimraf build && npm run build"
 	},
 	"devDependencies": {
 		"@rollup/plugin-commonjs": "^11.0.1",
@@ -27,13 +27,12 @@
 		"karma-rollup-preprocessor": "^7.0.3",
 		"mocha": "^7.0.0",
 		"puppeteer": "^2.0.0",
+		"rimraf": "^3.0.0",
 		"rollup": "^1.29.1",
 		"typescript": "^3.7.5"
 	},
 	"files": [
-		"index.d.ts",
-		"index.js",
-		"index.js.map"
+		"build"
 	],
 	"license": "MIT",
 	"author": "Haowei Wen <yushijinhun@gmail.com> (https://github.com/yushijinhun)",
