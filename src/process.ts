@@ -1,5 +1,4 @@
-export type TextureCanvas = HTMLCanvasElement | OffscreenCanvas;
-export type TextureSource = HTMLImageElement | HTMLVideoElement | ImageBitmap | TextureCanvas;
+import { TextureCanvas, TextureSource } from "./types.js";
 
 function copyImage(context: CanvasImageData, sX: number, sY: number, w: number, h: number, dX: number, dY: number, flipHorizontal: boolean): void {
 	const imgData = context.getImageData(sX, sY, w, h);
