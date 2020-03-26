@@ -112,26 +112,27 @@ export function loadSkinToCanvas(canvas: TextureCanvas, image: TextureSource): v
 	}
 }
 
-export function loadCapeToCanvas(canvas: TextureCanvas, image: TextureSource): void {
-	let isOldFormat = false;
-	if (image.width !== 2 * image.height) {
-		if (image.width * 17 === image.height * 22) {
-			// width/height = 22/17
-			isOldFormat = true;
-		} else {
-			throw new Error(`Bad cape size: ${image.width}x${image.height}`);
-		}
+function computeCapeScale(image: TextureSource): number {
+	if (image.width === 2 * image.height) {
+		// 64x32
+		return image.width / 64;
+	} else if (image.width * 17 === image.height * 22) {
+		// 22x17
+		return image.width / 17;
+	} else if (image.width * 11 === image.height * 23) {
+		// 46x22
+		return image.width / 46;
+	} else {
+		throw new Error(`Bad cape size: ${image.width}x${image.height}`);
 	}
+}
+
+export function loadCapeToCanvas(canvas: TextureCanvas, image: TextureSource): void {
+	const scale = computeCapeScale(image);
+	canvas.width = 64 * scale;
+	canvas.height = 32 * scale;
 
 	const context = canvas.getContext("2d")!;
-	if (isOldFormat) {
-		const width = image.width * 64 / 22;
-		canvas.width = width;
-		canvas.height = width / 2;
-	} else {
-		canvas.width = image.width;
-		canvas.height = image.height;
-	}
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	context.drawImage(image, 0, 0, image.width, image.height);
 }
