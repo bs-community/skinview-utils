@@ -1,6 +1,7 @@
 /// <reference path="shims.d.ts"/>
 
 import { expect } from "chai";
+
 import { inferModelType, loadSkinToCanvas, loadImage } from "../src/index";
 
 import skin1_8Default from "./textures/skin-1.8-default-no_hd.png";
@@ -33,7 +34,7 @@ describe("process skin texture", () => {
 	it("clear the hat area of legacy skin", async () => {
 		const canvas = await loadSkin(skinLegacyHatDefault);
 		const data = canvas.getContext("2d")!.getImageData(0, 0, 64, 32).data;
-		const checkArea = (x0, y0, w, h) => {
+		const checkArea = (x0: number, y0: number, w: number, h: number) => {
 			for (let x = x0; x < x0 + w; x++) {
 				for (let y = y0; y < y0 + h; y++) {
 					expect(data[(y * 64 + x) * 4 + 3]).to.equal(0);

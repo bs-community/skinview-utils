@@ -6,11 +6,7 @@
 			"dom",
 			"es2015"
 		],
-		"strict": true,
-		"declaration": true,
-		"sourceMap": true,
-		"types": [],
-		"outDir": "build"
+		"strict": true
 	},
 	"include": [
 		"src"
