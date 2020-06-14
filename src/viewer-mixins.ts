@@ -2,7 +2,8 @@ import { loadImage, RemoteImage } from "./load-image.js";
 import { inferModelType, loadCapeToCanvas, loadSkinToCanvas } from "./process.js";
 import { ModelType, TextureCanvas, TextureSource } from "./types.js";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// https://www.typescriptlang.org/docs/handbook/mixins.html
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function applyMixins(derivedCtor: any, baseCtors: any[]): void {
 	baseCtors.forEach(baseCtor => {
 		Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
@@ -11,7 +12,7 @@ export function applyMixins(derivedCtor: any, baseCtors: any[]): void {
 	});
 }
 
-function isTextureSource(value: TextureSource | RemoteImage): value is TextureSource {
+export function isTextureSource(value: TextureSource | RemoteImage): value is TextureSource {
 	return value instanceof EventTarget || value instanceof ImageBitmap;
 }
 
