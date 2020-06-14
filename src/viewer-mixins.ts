@@ -22,8 +22,8 @@ export abstract class SkinContainer<T> {
 	protected abstract resetSkin(): void;
 
 	loadSkin(empty: null): void;
-	loadSkin(source: TextureSource, model: ModelType | "auto-detect", options?: T): void;
-	async loadSkin(source: RemoteImage, model: ModelType | "auto-detect", options?: T): Promise<void>;
+	loadSkin(source: TextureSource, model?: ModelType | "auto-detect", options?: T): void;
+	async loadSkin(source: RemoteImage, model?: ModelType | "auto-detect", options?: T): Promise<void>;
 
 	loadSkin(source: TextureSource | RemoteImage | null, model: ModelType | "auto-detect" = "auto-detect", options?: T): void | Promise<void> {
 		if (source === null) {
