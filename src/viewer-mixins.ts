@@ -26,7 +26,7 @@ export abstract class SkinContainer<T> {
 		source: S,
 		model?: ModelType | "auto-detect",
 		options?: T
-	): S extends RemoteImage ? Promise<void> : void;
+	): S extends TextureSource ? void : Promise<void>;
 
 	loadSkin(source: TextureSource | RemoteImage | null, model: ModelType | "auto-detect" = "auto-detect", options?: T): void | Promise<void> {
 		if (source === null) {
@@ -50,7 +50,7 @@ export abstract class CapeContainer<T> {
 	loadCape<S extends TextureSource | RemoteImage>(
 		source: S,
 		options?: T
-	): S extends RemoteImage ? Promise<void> : void;
+	): S extends TextureSource ? void : Promise<void>;
 
 	loadCape(source: TextureSource | RemoteImage | null, options?: T): void | Promise<void> {
 		if (source === null) {
