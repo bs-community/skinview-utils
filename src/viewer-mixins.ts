@@ -22,8 +22,11 @@ export abstract class SkinContainer<T> {
 	protected abstract resetSkin(): void;
 
 	loadSkin(empty: null): void;
-	loadSkin(source: TextureSource, model?: ModelType | "auto-detect", options?: T): void;
-	async loadSkin(source: RemoteImage, model?: ModelType | "auto-detect", options?: T): Promise<void>;
+	loadSkin<S extends TextureSource | RemoteImage>(
+		source: S,
+		model?: ModelType | "auto-detect",
+		options?: T
+	): S extends RemoteImage ? Promise<void> : void;
 
 	loadSkin(source: TextureSource | RemoteImage | null, model: ModelType | "auto-detect" = "auto-detect", options?: T): void | Promise<void> {
 		if (source === null) {
@@ -33,7 +36,7 @@ export abstract class SkinContainer<T> {
 			const actualModel = model === "auto-detect" ? inferModelType(this.skinCanvas) : model;
 			this.skinLoaded(actualModel, options);
 		} else {
-			return (async (): Promise<void> => this.loadSkin(await loadImage(source), model, options))();
+			return loadImage(source).then(image => this.loadSkin(image, model, options));
 		}
 	}
 }
@@ -44,8 +47,10 @@ export abstract class CapeContainer<T> {
 	protected abstract resetCape(): void;
 
 	loadCape(empty: null): void;
-	loadCape(source: TextureSource, options?: T): void;
-	async loadCape(source: RemoteImage, options?: T): Promise<void>;
+	loadCape<S extends TextureSource | RemoteImage>(
+		source: S,
+		options?: T
+	): S extends RemoteImage ? Promise<void> : void;
 
 	loadCape(source: TextureSource | RemoteImage | null, options?: T): void | Promise<void> {
 		if (source === null) {
@@ -54,7 +59,7 @@ export abstract class CapeContainer<T> {
 			loadCapeToCanvas(this.capeCanvas, source);
 			this.capeLoaded(options);
 		} else {
-			return (async (): Promise<void> => this.loadCape(await loadImage(source), options))();
+			return loadImage(source).then(image => this.loadCape(image, options));
 		}
 	}
 }
