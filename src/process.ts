@@ -118,7 +118,7 @@ function computeCapeScale(image: TextureSource): number {
 		return image.width / 64;
 	} else if (image.width * 17 === image.height * 22) {
 		// 22x17
-		return image.width / 17;
+		return image.width / 22;
 	} else if (image.width * 11 === image.height * 23) {
 		// 46x22
 		return image.width / 46;
