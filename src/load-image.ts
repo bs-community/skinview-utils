@@ -1,5 +1,6 @@
 export type RemoteImage = string | {
     src: string;
+    /** @defaultvalue "anonymous" */
     crossOrigin?: string | null;
     referrerPolicy?: string;
 };
@@ -12,9 +13,7 @@ export async function loadImage(source: RemoteImage): Promise<HTMLImageElement> 
         if (typeof source === "string") {
             image.src = source;
         } else {
-            if (source.crossOrigin !== undefined) {
-                image.crossOrigin = source.crossOrigin;
-            }
+            image.crossOrigin = source.crossOrigin === undefined ? "anonymous" : source.crossOrigin;
             if (source.referrerPolicy !== undefined) {
                 image.referrerPolicy = source.referrerPolicy;
             }
