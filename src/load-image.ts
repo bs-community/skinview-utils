@@ -9,6 +9,7 @@ export async function loadImage(source: RemoteImage): Promise<HTMLImageElement> 
     return new Promise((resolve, reject) => {
         image.onload = (): void => resolve(image);
         image.onerror = reject;
+		image.crossOrigin = "Anonymous";
         if (typeof source === "string") {
             image.src = source;
         } else {
