@@ -10,10 +10,13 @@ export async function loadImage(source: RemoteImage): Promise<HTMLImageElement> 
     return new Promise((resolve, reject) => {
         image.onload = (): void => resolve(image);
         image.onerror = reject;
+        image.crossOrigin = "anonymous";
         if (typeof source === "string") {
             image.src = source;
         } else {
-            image.crossOrigin = source.crossOrigin === undefined ? "anonymous" : source.crossOrigin;
+            if (source.crossOrigin !== undefined) {
+                image.crossOrigin = source.crossOrigin;
+            }
             if (source.referrerPolicy !== undefined) {
                 image.referrerPolicy = source.referrerPolicy;
             }
