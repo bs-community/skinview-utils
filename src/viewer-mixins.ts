@@ -13,8 +13,9 @@ export function applyMixins(derivedCtor: any, baseCtors: any[]): void {
 }
 
 export function isTextureSource(value: TextureSource | RemoteImage): value is TextureSource {
-	return value instanceof EventTarget ||
-		(typeof ImageBitmap !== "undefined" && value instanceof ImageBitmap);
+	return value instanceof Node || // HTMLImageElement, HTMLVideoElement, HTMLCanvasElement
+		(typeof ImageBitmap !== "undefined" && value instanceof ImageBitmap) ||
+		(typeof OffscreenCanvas !== "undefined" && value instanceof OffscreenCanvas);
 }
 
 export abstract class SkinContainer<T> {
