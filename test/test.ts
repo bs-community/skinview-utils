@@ -8,6 +8,7 @@ import skin1_8Default from "./textures/skin-1.8-default-no_hd.png";
 import skin1_8Slim from "./textures/skin-1.8-slim-no_hd.png";
 import skinOldDefault from "./textures/skin-old-default-no_hd.png";
 import skinLegacyHatDefault from "./textures/skin-legacyhat-default-no_hd.png";
+import skin1_8SlimBlackedge from "./textures/skin-1.8-slim-no_hd-blackedge.png";
 
 async function loadSkin(src: string) {
 	const texture = await loadImage(src);
@@ -27,6 +28,10 @@ describe("detect model of texture", () => {
 
 	it("old default", async () =>
 		expect(inferModelType(await loadSkin(skinOldDefault))).to.equal("default")
+	);
+
+	it("1.8 slim blackedge", async () =>
+		expect(inferModelType(await loadSkin(skin1_8SlimBlackedge))).to.equal("slim")
 	);
 });
 
