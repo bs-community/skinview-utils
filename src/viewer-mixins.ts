@@ -1,5 +1,5 @@
 import { loadImage, RemoteImage } from "./load-image.js";
-import { inferModelType, loadCapeToCanvas, loadSkinToCanvas } from "./process.js";
+import { inferModelType, loadCapeToCanvas, animateCape, loadEarsToCanvas, loadSkinToCanvas } from "./process.js";
 import { ModelType, TextureCanvas, TextureSource } from "./types.js";
 
 // https://www.typescriptlang.org/docs/handbook/mixins.html
@@ -47,6 +47,14 @@ export abstract class CapeContainer<T> {
 	protected abstract capeLoaded(options?: T): void;
 	protected abstract get capeCanvas(): TextureCanvas;
 	protected abstract resetCape(): void;
+	private capeImage: TextureSource | undefined;
+
+	animateCape(options?: T): void {
+		if(this.capeImage != undefined) {
+			animateCape(this.capeCanvas, this.capeImage);
+			this.capeLoaded(options);
+		}
+	}
 
 	loadCape(empty: null): void;
 	loadCape<S extends TextureSource | RemoteImage>(
@@ -61,7 +69,33 @@ export abstract class CapeContainer<T> {
 			loadCapeToCanvas(this.capeCanvas, source);
 			this.capeLoaded(options);
 		} else {
-			return loadImage(source).then(image => this.loadCape(image, options));
+			return loadImage(source).then(image => {
+				this.capeImage = image;
+				this.loadCape(image, options)
+			});
+		}
+	}
+}
+
+export abstract class EarsContainer<T> {
+	protected abstract earsLoaded(options?: T): void;
+	protected abstract get earsCanvas(): TextureCanvas;
+	protected abstract resetEars(): void;
+
+	loadEars(empty: null): void;
+	loadEars<S extends TextureSource | RemoteImage>(
+		source: S,
+		options?: T
+	): S extends TextureSource ? void : Promise<void>;
+
+	loadEars(source: TextureSource | RemoteImage | null, options?: T): void | Promise<void> {
+		if (source === null) {
+			this.resetEars();
+		} else if (isTextureSource(source)) {
+			loadEarsToCanvas(this.earsCanvas, source);
+			this.earsLoaded(options);
+		} else {
+			return loadImage(source).then(image => this.loadEars(image, options));
 		}
 	}
 }

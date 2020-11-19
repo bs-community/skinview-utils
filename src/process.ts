@@ -1,5 +1,11 @@
 import { TextureCanvas, TextureSource, ModelType } from "./types.js";
 
+let isCapeAnimated = false;
+let lastFrame = 0;
+let maxFrames = 1;
+let lastFrameTime = 0;
+const capeInterval = 100;
+
 function copyImage(context: CanvasImageData, sX: number, sY: number, w: number, h: number, dX: number, dY: number, flipHorizontal: boolean): void {
 	const imgData = context.getImageData(sX, sY, w, h);
 	if (flipHorizontal) {
@@ -112,29 +118,60 @@ export function loadSkinToCanvas(canvas: TextureCanvas, image: TextureSource): v
 	}
 }
 
-function computeCapeScale(image: TextureSource): number {
-	if (image.width === 2 * image.height) {
-		// 64x32
-		return image.width / 64;
-	} else if (image.width * 17 === image.height * 22) {
-		// 22x17
-		return image.width / 22;
-	} else if (image.width * 11 === image.height * 23) {
-		// 46x22
-		return image.width / 46;
+export function loadCapeToCanvas(canvas: TextureCanvas, image: TextureSource, offset = 0): void {
+	let canvasWidth = 64;
+	let canvasHeight = 32;
+
+	if((image.height > image.width / 2) && (image.height >= image.width)) {
+		isCapeAnimated = true;
+		canvasWidth = image.width
+		canvasHeight = image.width / 2
 	} else {
-		throw new Error(`Bad cape size: ${image.width}x${image.height}`);
+		while(image.width > canvasWidth) {
+			canvasWidth *= 2
+			canvasHeight *= 2
+		}
+	}
+
+	canvas.width = canvasWidth,
+	canvas.height = canvasHeight;
+
+	const frame = canvas.getContext("2d");
+	if(frame != null) {
+		frame.clearRect(0, 0, canvas.width, canvas.height);
+		if(isCapeAnimated) {
+			frame.drawImage(image, 0, offset, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+		} else {
+			frame.drawImage(image, 0, 0);
+		}
 	}
 }
 
-export function loadCapeToCanvas(canvas: TextureCanvas, image: TextureSource): void {
-	const scale = computeCapeScale(image);
-	canvas.width = 64 * scale;
-	canvas.height = 32 * scale;
+export function animateCape(capeCanvas: TextureCanvas, image: TextureSource): void {
+	if(!isCapeAnimated) return;
 
-	const context = canvas.getContext("2d")!;
-	context.clearRect(0, 0, canvas.width, canvas.height);
-	context.drawImage(image, 0, 0, image.width, image.height);
+	if (image.height !== image.width / 2) {
+		const currentTime = Date.now();
+		if (currentTime > lastFrameTime + capeInterval) {
+			maxFrames = image.height / (image.width / 2);
+			const currentFrame = lastFrame + 1 > maxFrames - 1 ? 0 : lastFrame + 1;
+
+			lastFrame = currentFrame,
+			lastFrameTime = currentTime;
+
+			const offset = currentFrame * (image.width / 2);
+			loadCapeToCanvas(capeCanvas, image, offset)
+		}
+	}
+}
+
+export function loadEarsToCanvas(canvas: TextureCanvas, image: TextureSource): void {
+	canvas.width = 14;
+	canvas.height = 7;
+
+	const context = canvas.getContext("2d");
+	context?.clearRect(0, 0, canvas.width, canvas.height);
+	context?.drawImage(image, 0, 0, image.width, image.height);
 }
 
 function isAreaBlack(context: CanvasImageData, x0: number, y0: number, w: number, h: number): boolean {
