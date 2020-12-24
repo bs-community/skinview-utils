@@ -2,7 +2,7 @@
 
 import { expect } from "chai";
 
-import { inferModelType, loadSkinToCanvas, loadImage } from "../src/index";
+import { inferModelType, loadSkinToCanvas, loadImage, isTextureSource } from "../src/index";
 
 import skin1_8Default from "./textures/skin-1.8-default-no_hd.png";
 import skin1_8Slim from "./textures/skin-1.8-slim-no_hd.png";
@@ -48,5 +48,36 @@ describe("process skin texture", () => {
 		};
 		checkArea(40, 0, 8 * 2, 8); // top + bottom
 		checkArea(32, 8, 8 * 4, 8) // right + front + left + back
+	});
+});
+
+describe("isTextureSource", () => {
+	it("returns true for <img>", () => {
+		const el = document.createElement("img");
+		expect(isTextureSource(el)).to.be.true;
+	});
+	it("returns true for <video>", () => {
+		const el = document.createElement("video");
+		expect(isTextureSource(el)).to.be.true;
+	});
+	it("returns true for <canvas>", () => {
+		const el = document.createElement("canvas");
+		expect(isTextureSource(el)).to.be.true;
+	});
+	it("returns true for ImageBitmap", async () => {
+		const bitmap = await createImageBitmap(await loadSkin(skin1_8Default));
+		expect(isTextureSource(bitmap)).to.be.true;
+	});
+	it("returns true for OffscreenCanvas", () => {
+		const canvas = new OffscreenCanvas(1, 1);
+		expect(isTextureSource(canvas)).to.be.true;
+	});
+	it("returns false for {}", () => {
+		expect(isTextureSource({})).to.be.false;
+	});
+	it("returns false for {src:...}", () => {
+		expect(isTextureSource({
+			src: "https://example.com/image.png"
+		})).to.be.false;
 	});
 });
