@@ -1,6 +1,6 @@
 import { loadImage, RemoteImage } from "./load-image.js";
 import { inferModelType, loadCapeToCanvas, loadSkinToCanvas } from "./process.js";
-import { ModelType, TextureCanvas, TextureSource } from "./types.js";
+import { ModelType, TextureCanvas, TextureSource, isTextureSource } from "./types.js";
 
 // https://www.typescriptlang.org/docs/handbook/mixins.html
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
@@ -10,12 +10,6 @@ export function applyMixins(derivedCtor: any, baseCtors: any[]): void {
 			Object.defineProperty(derivedCtor.prototype, name, Object.getOwnPropertyDescriptor(baseCtor.prototype, name)!);
 		});
 	});
-}
-
-export function isTextureSource(value: TextureSource | RemoteImage): value is TextureSource {
-	return value instanceof Node || // HTMLImageElement, HTMLVideoElement, HTMLCanvasElement
-		(typeof ImageBitmap !== "undefined" && value instanceof ImageBitmap) ||
-		(typeof OffscreenCanvas !== "undefined" && value instanceof OffscreenCanvas);
 }
 
 export abstract class SkinContainer<T> {
