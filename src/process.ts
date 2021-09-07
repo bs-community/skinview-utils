@@ -49,19 +49,61 @@ function computeSkinScale(width: number): number {
 	return width / 64.0;
 }
 
-function fixOpaqueSkin(context: CanvasImageData & CanvasRect, width: number): void {
-	// Some ancient skins don't have transparent pixels (nor have helm).
-	// We have to make the helm area transparent, otherwise it will be rendered as black.
-	if (!hasTransparency(context, 0, 0, width, width / 2)) {
-		const scale = computeSkinScale(width);
-		const clearArea = (x: number, y: number, w: number, h: number): void =>
-			context.clearRect(x * scale, y * scale, w * scale, h * scale);
-		clearArea(40, 0, 8, 8); // Helm Top
-		clearArea(48, 0, 8, 8); // Helm Bottom
-		clearArea(32, 8, 8, 8); // Helm Right
-		clearArea(40, 8, 8, 8); // Helm Front
-		clearArea(48, 8, 8, 8); // Helm Left
-		clearArea(56, 8, 8, 8); // Helm Back
+function fixOpaqueSkin(context: CanvasImageData & CanvasRect, width: number, format1_8: boolean): void {
+	// see https://github.com/bs-community/skinview3d/issues/15
+	// see https://github.com/bs-community/skinview3d/issues/93
+
+	// check whether the skin has opaque background
+	if (format1_8) {
+		if (hasTransparency(context, 0, 0, width, width))
+			return;
+	} else {
+		if (hasTransparency(context, 0, 0, width, width / 2))
+			return;
+	}
+
+	const scale = computeSkinScale(width);
+	const clearArea = (x: number, y: number, w: number, h: number): void =>
+		context.clearRect(x * scale, y * scale, w * scale, h * scale);
+
+	clearArea(40, 0, 8, 8); // Helm Top
+	clearArea(48, 0, 8, 8); // Helm Bottom
+	clearArea(32, 8, 8, 8); // Helm Right
+	clearArea(40, 8, 8, 8); // Helm Front
+	clearArea(48, 8, 8, 8); // Helm Left
+	clearArea(56, 8, 8, 8); // Helm Back
+
+	if (format1_8) {
+		clearArea(4, 32, 4, 4); // Right Leg Layer 2 Top
+		clearArea(8, 32, 4, 4); // Right Leg Layer 2 Bottom
+		clearArea(0, 36, 4, 12); // Right Leg Layer 2 Right
+		clearArea(4, 36, 4, 12); // Right Leg Layer 2 Front
+		clearArea(8, 36, 4, 12); // Right Leg Layer 2 Left
+		clearArea(12, 36, 4, 12); // Right Leg Layer 2 Back
+		clearArea(20, 32, 8, 4); // Torso Layer 2 Top
+		clearArea(28, 32, 8, 4); // Torso Layer 2 Bottom
+		clearArea(16, 36, 4, 12); // Torso Layer 2 Right
+		clearArea(20, 36, 8, 12); // Torso Layer 2 Front
+		clearArea(28, 36, 4, 12); // Torso Layer 2 Left
+		clearArea(32, 36, 8, 12); // Torso Layer 2 Back
+		clearArea(44, 32, 4, 4); // Right Arm Layer 2 Top
+		clearArea(48, 32, 4, 4); // Right Arm Layer 2 Bottom
+		clearArea(40, 36, 4, 12); // Right Arm Layer 2 Right
+		clearArea(44, 36, 4, 12); // Right Arm Layer 2 Front
+		clearArea(48, 36, 4, 12); // Right Arm Layer 2 Left
+		clearArea(52, 36, 12, 12); // Right Arm Layer 2 Back
+		clearArea(4, 48, 4, 4); // Left Leg Layer 2 Top
+		clearArea(8, 48, 4, 4); // Left Leg Layer 2 Bottom
+		clearArea(0, 52, 4, 12); // Left Leg Layer 2 Right
+		clearArea(4, 52, 4, 12); // Left Leg Layer 2 Front
+		clearArea(8, 52, 4, 12); // Left Leg Layer 2 Left
+		clearArea(12, 52, 4, 12); // Left Leg Layer 2 Back
+		clearArea(52, 48, 4, 4); // Left Arm Layer 2 Top
+		clearArea(56, 48, 4, 4); // Left Arm Layer 2 Bottom
+		clearArea(48, 52, 4, 12); // Left Arm Layer 2 Right
+		clearArea(52, 52, 4, 12); // Left Arm Layer 2 Front
+		clearArea(56, 52, 4, 12); // Left Arm Layer 2 Left
+		clearArea(60, 52, 4, 12); // Left Arm Layer 2 Back
 	}
 }
 
@@ -69,8 +111,6 @@ function convertSkinTo1_8(context: CanvasImageData & CanvasRect, width: number):
 	const scale = computeSkinScale(width);
 	const copySkin = (sX: number, sY: number, w: number, h: number, dX: number, dY: number, flipHorizontal: boolean): void =>
 		copyImage(context, sX * scale, sY * scale, w * scale, h * scale, dX * scale, dY * scale, flipHorizontal);
-
-	fixOpaqueSkin(context, width);
 
 	copySkin(4, 16, 4, 4, 20, 48, true); // Top Leg
 	copySkin(8, 16, 4, 4, 24, 48, true); // Bottom Leg
@@ -104,11 +144,13 @@ export function loadSkinToCanvas(canvas: TextureCanvas, image: TextureSource): v
 		context.clearRect(0, 0, sideLength, sideLength);
 		context.drawImage(image, 0, 0, sideLength, sideLength / 2.0);
 		convertSkinTo1_8(context, sideLength);
+		fixOpaqueSkin(context, canvas.width, false);
 	} else {
 		canvas.width = image.width;
 		canvas.height = image.height;
 		context.clearRect(0, 0, image.width, image.height);
 		context.drawImage(image, 0, 0, canvas.width, canvas.height);
+		fixOpaqueSkin(context, canvas.width, true);
 	}
 }
 

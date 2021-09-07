@@ -9,6 +9,7 @@ import skin1_8Slim from "./textures/skin-1.8-slim-no_hd.png";
 import skinOldDefault from "./textures/skin-old-default-no_hd.png";
 import skinLegacyHatDefault from "./textures/skin-legacyhat-default-no_hd.png";
 import skin1_8SlimBlackedge from "./textures/skin-1.8-slim-no_hd-blackedge.png";
+import skin1_8Opaque from "./textures/skin-1.8_opaque-default-no_hd.png";
 
 async function loadSkin(src: string) {
 	const texture = await loadImage(src);
@@ -36,18 +37,33 @@ describe("detect model of texture", () => {
 });
 
 describe("process skin texture", () => {
+	const expectTransparent = (canvas: HTMLCanvasElement, x0: number, y0: number, w: number, h: number) => {
+		const data = canvas.getContext("2d")!.getImageData(x0, y0, w, h).data;
+		for (let x = 0; x < w; x++) {
+			for (let y = 0; y < h; y++) {
+				expect(data[(y * h + x) * 4 + 3], `pixel (${x0 + x}, ${y0 + y})`).to.equal(0);
+			}
+		}
+	};
+
 	it("clear the hat area of legacy skin", async () => {
 		const canvas = await loadSkin(skinLegacyHatDefault);
-		const data = canvas.getContext("2d")!.getImageData(0, 0, 64, 32).data;
-		const checkArea = (x0: number, y0: number, w: number, h: number) => {
-			for (let x = x0; x < x0 + w; x++) {
-				for (let y = y0; y < y0 + h; y++) {
-					expect(data[(y * 64 + x) * 4 + 3]).to.equal(0);
-				}
-			}
-		};
-		checkArea(40, 0, 8 * 2, 8); // top + bottom
-		checkArea(32, 8, 8 * 4, 8) // right + front + left + back
+		expectTransparent(canvas, 40, 0, 8 * 2, 8); // top + bottom
+		expectTransparent(canvas, 32, 8, 8 * 4, 8)  // right + front + left + back
+	});
+
+	it("clear the 2nd layer of opaque skin", async () => {
+		const canvas = await loadSkin(skin1_8Opaque);
+		expectTransparent(canvas, 40, 0, 16, 8);   // HEAD2: top + bottom
+		expectTransparent(canvas, 32, 8, 32, 8)    // HEAD2: right + front + left + back
+		expectTransparent(canvas, 0, 36, 56, 12);  // RL2, BODY2, RA2: right + front + left + back
+		expectTransparent(canvas, 4, 32, 8, 4);    // RL2: top + bottom
+		expectTransparent(canvas, 20, 32, 16, 4);  // BODY2: top + bottom
+		expectTransparent(canvas, 44, 32, 8, 4);   // RA2: top + bottom
+		expectTransparent(canvas, 0, 52, 16, 12);  // LL2:right + front + left + back
+		expectTransparent(canvas, 4, 48, 8, 4);    // LL2: top + bottom
+		expectTransparent(canvas, 48, 52, 16, 12); // LA2: right + front + left + back
+		expectTransparent(canvas, 52, 48, 8, 4);   // LA2: top + bottom
 	});
 });
 
