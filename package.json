@@ -50,6 +50,6 @@
 		"url": "git+https://github.com/bs-community/skinview-utils.git"
 	},
 	"dependencies": {
-		"@types/offscreencanvas": "^2019.6.3"
+		"@types/offscreencanvas": "^2019.6.4"
 	}
 }
