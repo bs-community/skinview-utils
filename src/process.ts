@@ -259,3 +259,36 @@ export function inferModelType(canvas: TextureCanvas): ModelType {
 		);
 	return isSlim ? "slim" : "default";
 }
+
+function computeEarsScale(image: TextureSource): number {
+	if (image.width === image.height * 2 && image.height % 7 === 0) {
+		return image.height / 7;
+	} else {
+		throw new Error(`Bad ears size: ${image.width}x${image.height}`);
+	}
+}
+
+export function loadEarsToCanvas(canvas: TextureCanvas, image: TextureSource): void {
+	const scale = computeEarsScale(image);
+	canvas.width = 14 * scale;
+	canvas.height = 7 * scale;
+
+	const context = canvas.getContext("2d")!;
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	context.drawImage(image, 0, 0, image.width, image.height);
+}
+
+export function loadEarsToCanvasFromSkin(canvas: TextureCanvas, image: TextureSource): void {
+	if (image.width !== image.height && image.width !== 2 * image.height) {
+		throw new Error(`Bad skin size: ${image.width}x${image.height}`);
+	}
+
+	const scale = computeSkinScale(image.width);
+	const w = 14 * scale;
+	const h = 7 * scale;
+	canvas.width = w;
+	canvas.height = h;
+	const context = canvas.getContext("2d")!;
+	context.clearRect(0, 0, w, h);
+	context.drawImage(image, 24 * scale, 0, w, h, 0, 0, w, h);
+}
