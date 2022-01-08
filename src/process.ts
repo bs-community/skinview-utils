@@ -197,6 +197,24 @@ function isAreaBlack(context: CanvasImageData, x0: number, y0: number, w: number
 	return true;
 }
 
+function isAreaWhite(context: CanvasImageData, x0: number, y0: number, w: number, h: number): boolean {
+	const imgData = context.getImageData(x0, y0, w, h);
+	for (let x = 0; x < w; x++) {
+		for (let y = 0; y < h; y++) {
+			const offset = (x + y * w) * 4;
+			if (!(
+				imgData.data[offset + 0] === 0xff &&
+				imgData.data[offset + 1] === 0xff &&
+				imgData.data[offset + 2] === 0xff &&
+				imgData.data[offset + 3] === 0xff
+			)) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 export function inferModelType(canvas: TextureCanvas): ModelType {
 	// The right arm area of *default* skins:
 	// (44,16)->*-------*-------*
@@ -236,7 +254,7 @@ export function inferModelType(canvas: TextureCanvas): ModelType {
 	//
 	// If there is a transparent pixel in any of the 4 unused areas, the skin must be slim,
 	// as transparent pixels are not allowed in the first layer.
-	// If the 4 areas are all black, the skin is also considered as slim.
+	// If the 4 areas are all black or all white, the skin is also considered as slim.
 
 	const scale = computeSkinScale(canvas.width);
 	const context = canvas.getContext("2d")!;
@@ -244,6 +262,8 @@ export function inferModelType(canvas: TextureCanvas): ModelType {
 		hasTransparency(context, x * scale, y * scale, w * scale, h * scale);
 	const checkBlack = (x: number, y: number, w: number, h: number): boolean =>
 		isAreaBlack(context, x * scale, y * scale, w * scale, h * scale);
+	const checkWhite = (x: number, y: number, w: number, h: number): boolean =>
+		isAreaWhite(context, x * scale, y * scale, w * scale, h * scale);
 	const isSlim =
 		(
 			checkTransparency(50, 16, 2, 4) ||
@@ -256,6 +276,12 @@ export function inferModelType(canvas: TextureCanvas): ModelType {
 			checkBlack(54, 20, 2, 12) &&
 			checkBlack(42, 48, 2, 4) &&
 			checkBlack(46, 52, 2, 12)
+		) ||
+		(
+			checkWhite(50, 16, 2, 4) &&
+			checkWhite(54, 20, 2, 12) &&
+			checkWhite(42, 48, 2, 4) &&
+			checkWhite(46, 52, 2, 12)
 		);
 	return isSlim ? "slim" : "default";
 }
