@@ -43,7 +43,9 @@ describe("detect model of texture", () => {
 
 describe("process skin texture", () => {
 	const expectTransparent = (canvas: HTMLCanvasElement, x0: number, y0: number, w: number, h: number) => {
-		const data = canvas.getContext("2d")!.getImageData(x0, y0, w, h).data;
+		const ctx = canvas.getContext("2d", { willReadFrequently: true })
+
+		const data = ctx!.getImageData(x0, y0, w, h).data;
 		for (let x = 0; x < w; x++) {
 			for (let y = 0; y < h; y++) {
 				expect(data[(y * h + x) * 4 + 3], `pixel (${x0 + x}, ${y0 + y})`).to.equal(0);
