@@ -164,6 +164,8 @@ function computeCapeScale(image: TextureSource): number {
 	} else if (image.width * 11 === image.height * 23) {
 		// 46x22
 		return image.width / 46;
+	} else if ((image.height % (image.width / 2)) == 0) {
+        return image.width / 64
 	} else {
 		throw new Error(`Bad cape size: ${image.width}x${image.height}`);
 	}
