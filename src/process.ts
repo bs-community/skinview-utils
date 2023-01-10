@@ -165,6 +165,9 @@ function computeCapeScale(image: TextureSource): number {
 		// 46x22
 		return image.width / 46;
 	} else if ((image.height % (image.width / 2)) == 0) {
+		// Supports animated capes sprite
+		// (height / (width/2) == total frames
+		// Total frames must be a whole number
 		return image.width / 64
 	} else {
 		throw new Error(`Bad cape size: ${image.width}x${image.height}`);
