@@ -183,8 +183,14 @@ export function loadCapeToCanvas(canvas: TextureCanvas, image: TextureSource, fr
 	frame = frame != undefined ? frame : 1;
 
 	const frameWidth = image.width;
-	const frameHeight = image.width / 2;
-	const frameOffset = frameHeight * (frame - 1);
+	let frameHeight = image.height;
+	let frameOffset = 0
+
+	//This checks if a cape is a sprite
+	if(frameHeight >= frameWidth) {
+		frameHeight = frameWidth / 2;
+		frameOffset = frameHeight * (frame - 1);
+	}
 
 	const context = canvas.getContext("2d")!;
 	context.clearRect(0, 0, canvas.width, canvas.height);
