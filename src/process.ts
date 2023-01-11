@@ -174,14 +174,21 @@ function computeCapeScale(image: TextureSource): number {
 	}
 }
 
-export function loadCapeToCanvas(canvas: TextureCanvas, image: TextureSource): void {
+export function loadCapeToCanvas(canvas: HTMLCanvasElement, image: TextureSource, frame?: number): void {
 	const scale = computeCapeScale(image);
 	canvas.width = 64 * scale;
 	canvas.height = 32 * scale;
 
+	//Default a cape has a single frame unless animated
+	frame = frame != undefined ? frame : 1;
+
+	const frameWidth = image.width;
+	const frameHeight = image.width / 2;
+	const frameOffset = frameHeight * (frame - 1);
+
 	const context = canvas.getContext("2d")!;
 	context.clearRect(0, 0, canvas.width, canvas.height);
-	context.drawImage(image, 0, 0, image.width, image.height);
+	context.drawImage(image, 0, frameOffset, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight)
 }
 
 function isAreaBlack(context: CanvasImageData, x0: number, y0: number, w: number, h: number): boolean {
