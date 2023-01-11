@@ -174,7 +174,7 @@ function computeCapeScale(image: TextureSource): number {
 	}
 }
 
-export function loadCapeToCanvas(canvas: HTMLCanvasElement, image: TextureSource, frame?: number): void {
+export function loadCapeToCanvas(canvas: TextureCanvas, image: TextureSource, frame?: number): void {
 	const scale = computeCapeScale(image);
 	canvas.width = 64 * scale;
 	canvas.height = 32 * scale;
