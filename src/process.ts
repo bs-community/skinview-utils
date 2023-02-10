@@ -2,38 +2,6 @@ import { TextureCanvas, TextureSource, ModelType } from "./types.js";
 
 type CanvasContext = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
 
-function copyImage(context: CanvasImageData, sX: number, sY: number, w: number, h: number, dX: number, dY: number, flipHorizontal: boolean): void {
-	const imgData = context.getImageData(sX, sY, w, h);
-	if (flipHorizontal) {
-		for (let y = 0; y < h; y++) {
-			for (let x = 0; x < (w / 2); x++) {
-				const index = (x + y * w) * 4;
-				const index2 = ((w - x - 1) + y * w) * 4;
-				const pA1 = imgData.data[index];
-				const pA2 = imgData.data[index + 1];
-				const pA3 = imgData.data[index + 2];
-				const pA4 = imgData.data[index + 3];
-
-				const pB1 = imgData.data[index2];
-				const pB2 = imgData.data[index2 + 1];
-				const pB3 = imgData.data[index2 + 2];
-				const pB4 = imgData.data[index2 + 3];
-
-				imgData.data[index] = pB1;
-				imgData.data[index + 1] = pB2;
-				imgData.data[index + 2] = pB3;
-				imgData.data[index + 3] = pB4;
-
-				imgData.data[index2] = pA1;
-				imgData.data[index2 + 1] = pA2;
-				imgData.data[index2 + 2] = pA3;
-				imgData.data[index2 + 3] = pA4;
-			}
-		}
-	}
-	context.putImageData(imgData, dX, dY);
-}
-
 function hasTransparency(context: CanvasImageData, x0: number, y0: number, w: number, h: number): boolean {
 	const imgData = context.getImageData(x0, y0, w, h);
 	for (let x = 0; x < w; x++) {
@@ -109,23 +77,29 @@ function fixOpaqueSkin(context: CanvasImageData & CanvasRect, width: number, for
 	}
 }
 
-function convertSkinTo1_8(context: CanvasImageData & CanvasRect, width: number): void {
-	const scale = computeSkinScale(width);
-	const copySkin = (sX: number, sY: number, w: number, h: number, dX: number, dY: number, flipHorizontal: boolean): void =>
-		copyImage(context, sX * scale, sY * scale, w * scale, h * scale, dX * scale, dY * scale, flipHorizontal);
+function convertSkinTo1_8(context: CanvasContext, width: number): void {
+	// Copied parts are horizontally flipped
+	context.save();
+	context.scale(-1, 1);
 
-	copySkin(4, 16, 4, 4, 20, 48, true); // Top Leg
-	copySkin(8, 16, 4, 4, 24, 48, true); // Bottom Leg
-	copySkin(0, 20, 4, 12, 24, 52, true); // Outer Leg
-	copySkin(4, 20, 4, 12, 20, 52, true); // Front Leg
-	copySkin(8, 20, 4, 12, 16, 52, true); // Inner Leg
-	copySkin(12, 20, 4, 12, 28, 52, true); // Back Leg
-	copySkin(44, 16, 4, 4, 36, 48, true); // Top Arm
-	copySkin(48, 16, 4, 4, 40, 48, true); // Bottom Arm
-	copySkin(40, 20, 4, 12, 40, 52, true); // Outer Arm
-	copySkin(44, 20, 4, 12, 36, 52, true); // Front Arm
-	copySkin(48, 20, 4, 12, 32, 52, true); // Inner Arm
-	copySkin(52, 20, 4, 12, 44, 52, true); // Back Arm
+	const scale = computeSkinScale(width);
+	const copySkin = (sX: number, sY: number, w: number, h: number, dX: number, dY: number): void =>
+		context.drawImage(context.canvas, sX * scale, sY * scale, w * scale, h * scale, -dX * scale, dY * scale, -w * scale, h * scale);
+
+	copySkin(4, 16, 4, 4, 20, 48); // Top Leg
+	copySkin(8, 16, 4, 4, 24, 48); // Bottom Leg
+	copySkin(0, 20, 4, 12, 24, 52); // Outer Leg
+	copySkin(4, 20, 4, 12, 20, 52); // Front Leg
+	copySkin(8, 20, 4, 12, 16, 52); // Inner Leg
+	copySkin(12, 20, 4, 12, 28, 52); // Back Leg
+	copySkin(44, 16, 4, 4, 36, 48); // Top Arm
+	copySkin(48, 16, 4, 4, 40, 48); // Bottom Arm
+	copySkin(40, 20, 4, 12, 40, 52); // Outer Arm
+	copySkin(44, 20, 4, 12, 36, 52); // Front Arm
+	copySkin(48, 20, 4, 12, 32, 52); // Inner Arm
+	copySkin(52, 20, 4, 12, 44, 52); // Back Arm
+
+	context.restore();
 }
 
 export function loadSkinToCanvas(canvas: TextureCanvas, image: TextureSource): void {
