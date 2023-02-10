@@ -1,5 +1,7 @@
 import { TextureCanvas, TextureSource, ModelType } from "./types.js";
 
+type CanvasContext = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
+
 function copyImage(context: CanvasImageData, sX: number, sY: number, w: number, h: number, dX: number, dY: number, flipHorizontal: boolean): void {
 	const imgData = context.getImageData(sX, sY, w, h);
 	if (flipHorizontal) {
@@ -136,7 +138,7 @@ export function loadSkinToCanvas(canvas: TextureCanvas, image: TextureSource): v
 		}
 	}
 
-	const context = canvas.getContext("2d")!;
+	const context = canvas.getContext("2d") as CanvasContext;
 	if (isOldFormat) {
 		const sideLength = image.width;
 		canvas.width = sideLength;
@@ -174,7 +176,7 @@ export function loadCapeToCanvas(canvas: TextureCanvas, image: TextureSource): v
 	canvas.width = 64 * scale;
 	canvas.height = 32 * scale;
 
-	const context = canvas.getContext("2d")!;
+	const context = canvas.getContext("2d") as CanvasContext;
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	context.drawImage(image, 0, 0, image.width, image.height);
 }
@@ -257,7 +259,7 @@ export function inferModelType(canvas: TextureCanvas): ModelType {
 	// If the 4 areas are all black or all white, the skin is also considered as slim.
 
 	const scale = computeSkinScale(canvas.width);
-	const context = canvas.getContext("2d")!;
+	const context = canvas.getContext("2d") as CanvasContext;
 	const checkTransparency = (x: number, y: number, w: number, h: number): boolean =>
 		hasTransparency(context, x * scale, y * scale, w * scale, h * scale);
 	const checkBlack = (x: number, y: number, w: number, h: number): boolean =>
@@ -299,7 +301,7 @@ export function loadEarsToCanvas(canvas: TextureCanvas, image: TextureSource): v
 	canvas.width = 14 * scale;
 	canvas.height = 7 * scale;
 
-	const context = canvas.getContext("2d")!;
+	const context = canvas.getContext("2d") as CanvasContext;
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	context.drawImage(image, 0, 0, image.width, image.height);
 }
@@ -314,7 +316,7 @@ export function loadEarsToCanvasFromSkin(canvas: TextureCanvas, image: TextureSo
 	const h = 7 * scale;
 	canvas.width = w;
 	canvas.height = h;
-	const context = canvas.getContext("2d")!;
+	const context = canvas.getContext("2d") as CanvasContext;
 	context.clearRect(0, 0, w, h);
 	context.drawImage(image, 24 * scale, 0, w, h, 0, 0, w, h);
 }
