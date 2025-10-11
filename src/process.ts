@@ -305,7 +305,9 @@ export function loadArmorToCanvas(canvas: TextureCanvas, layer1Image: TextureSou
 	}
 	const scale = computeSkinScale(width);
 	const copyRegion = (sX: number, sY: number, w: number, h: number, dX: number, dY: number): void =>
-		context.drawImage(canvas, sX * scale, sY * scale, w * scale, h * scale, -dX * scale, dY * scale, -w * scale, h * scale);
+		context.drawImage(canvas, sX * scale, sY * scale, w * scale, h * scale, dX * scale, dY * scale, w * scale, h * scale);
+	const clearArea = (x: number, y: number, w: number, h: number): void =>
+		context.clearRect(x * scale, y * scale, w * scale, h * scale);
 	
     canvas.width = width;
     canvas.height = width;
@@ -314,17 +316,17 @@ export function loadArmorToCanvas(canvas: TextureCanvas, layer1Image: TextureSou
         context.drawImage(layer1Image, 0, 0, width, height);
         convertSkinTo1_8(context, width);
         copyRegion(0, 0, 32, 16, 32, 0); // Move head to overlay
-        context.clearRect(0, 0, 32, 16); // Clear head
+        clearArea(0, 0, 32, 16); // Clear head
         copyRegion(16, 16, 24, 16, 16, 32); // Move body to overlay
-        context.clearRect(16, 16, 24, 16); // Clear body
+        clearArea(16, 16, 24, 16); // Clear body
         copyRegion(40, 16, 16, 16, 40, 32); // Move right arm to overlay
-        context.clearRect(40, 16, 16, 16); // Clear right arm
+        clearArea(40, 16, 16, 16); // Clear right arm
         copyRegion(32, 48, 16, 16, 48, 48); // Move left arm to overlay
-        context.clearRect(32, 48, 16, 16); // Clear left arm
+        clearArea(32, 48, 16, 16); // Clear left arm
         copyRegion(0, 16, 16, 16, 0, 32); // Move right leg to overlay
-        context.clearRect(0, 16, 16, 16); // Clear right leg
+        clearArea(0, 16, 16, 16); // Clear right leg
         copyRegion(16, 48, 16, 16, 0, 48); // Move left leg to overlay
-        context.clearRect(16, 48, 16, 16); // Clear left leg
+        clearArea(16, 48, 16, 16); // Clear left leg
     }
     if (layer2Image) {
         context.drawImage(layer2Image, 0, 0, width, height);
