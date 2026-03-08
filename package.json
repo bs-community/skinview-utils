@@ -14,7 +14,7 @@
 	"scripts": {
 		"build": "tsc --declaration --outDir build --sourceMap -p .",
 		"lint": "eslint --ext .ts src test",
-		"test": "eslint --ext .ts src test && vitest run",
+		"test": "vitest run",
 		"test:watch": "vitest",
 		"prepublishOnly": "rimraf build && npm run build"
 	},
