@@ -4,6 +4,13 @@
 	"description": "Utilities for working with Minecraft skins",
 	"type": "module",
 	"main": "build/index.js",
+	"exports": {
+		".": {
+			"types": "./build/index.d.ts",
+			"import": "./build/index.js",
+			"default": "./build/index.js"
+		}
+	},
 	"scripts": {
 		"build": "tsc --declaration --outDir build --sourceMap -p .",
 		"lint": "eslint --ext .ts src test",
