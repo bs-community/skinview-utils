@@ -19,6 +19,8 @@ jobs:
       run: npm ci
     - name: Lint
       run: npm run lint
+    - name: Format check
+      run: npm run fmt:check
     - name: Install Playwright browsers
       run: npx playwright install chromium --with-deps
     - name: Build

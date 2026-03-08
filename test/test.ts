@@ -21,28 +21,28 @@ async function loadSkin(src: string) {
 
 describe("detect model of texture", () => {
 	it("1.8 default", async () =>
-		expect(inferModelType(await loadSkin(skin1_8Default))).toBe("default")
-	);
+		expect(inferModelType(await loadSkin(skin1_8Default))).toBe("default"));
 
-	it("1.8 slim", async () =>
-		expect(inferModelType(await loadSkin(skin1_8Slim))).toBe("slim")
-	);
+	it("1.8 slim", async () => expect(inferModelType(await loadSkin(skin1_8Slim))).toBe("slim"));
 
 	it("old default", async () =>
-		expect(inferModelType(await loadSkin(skinOldDefault))).toBe("default")
-	);
+		expect(inferModelType(await loadSkin(skinOldDefault))).toBe("default"));
 
 	it("1.8 slim blackedge", async () =>
-		expect(inferModelType(await loadSkin(skin1_8SlimBlackedge))).toBe("slim")
-	);
+		expect(inferModelType(await loadSkin(skin1_8SlimBlackedge))).toBe("slim"));
 
 	it("1.8 slim whiteedge", async () =>
-		expect(inferModelType(await loadSkin(skin1_8SlimWhiteedge))).toBe("slim")
-	);
+		expect(inferModelType(await loadSkin(skin1_8SlimWhiteedge))).toBe("slim"));
 });
 
 describe("process skin texture", () => {
-	const expectTransparent = (canvas: HTMLCanvasElement, x0: number, y0: number, w: number, h: number) => {
+	const expectTransparent = (
+		canvas: HTMLCanvasElement,
+		x0: number,
+		y0: number,
+		w: number,
+		h: number,
+	) => {
 		const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
 		const data = ctx!.getImageData(x0, y0, w, h).data;
@@ -56,21 +56,21 @@ describe("process skin texture", () => {
 	it("clear the hat area of legacy skin", async () => {
 		const canvas = await loadSkin(skinLegacyHatDefault);
 		expectTransparent(canvas, 40, 0, 8 * 2, 8); // top + bottom
-		expectTransparent(canvas, 32, 8, 8 * 4, 8)  // right + front + left + back
+		expectTransparent(canvas, 32, 8, 8 * 4, 8); // right + front + left + back
 	});
 
 	it("clear the 2nd layer of opaque skin", async () => {
 		const canvas = await loadSkin(skin1_8Opaque);
-		expectTransparent(canvas, 40, 0, 16, 8);   // HEAD2: top + bottom
-		expectTransparent(canvas, 32, 8, 32, 8)    // HEAD2: right + front + left + back
-		expectTransparent(canvas, 0, 36, 56, 12);  // RL2, BODY2, RA2: right + front + left + back
-		expectTransparent(canvas, 4, 32, 8, 4);    // RL2: top + bottom
-		expectTransparent(canvas, 20, 32, 16, 4);  // BODY2: top + bottom
-		expectTransparent(canvas, 44, 32, 8, 4);   // RA2: top + bottom
-		expectTransparent(canvas, 0, 52, 16, 12);  // LL2:right + front + left + back
-		expectTransparent(canvas, 4, 48, 8, 4);    // LL2: top + bottom
+		expectTransparent(canvas, 40, 0, 16, 8); // HEAD2: top + bottom
+		expectTransparent(canvas, 32, 8, 32, 8); // HEAD2: right + front + left + back
+		expectTransparent(canvas, 0, 36, 56, 12); // RL2, BODY2, RA2: right + front + left + back
+		expectTransparent(canvas, 4, 32, 8, 4); // RL2: top + bottom
+		expectTransparent(canvas, 20, 32, 16, 4); // BODY2: top + bottom
+		expectTransparent(canvas, 44, 32, 8, 4); // RA2: top + bottom
+		expectTransparent(canvas, 0, 52, 16, 12); // LL2:right + front + left + back
+		expectTransparent(canvas, 4, 48, 8, 4); // LL2: top + bottom
 		expectTransparent(canvas, 48, 52, 16, 12); // LA2: right + front + left + back
-		expectTransparent(canvas, 52, 48, 8, 4);   // LA2: top + bottom
+		expectTransparent(canvas, 52, 48, 8, 4); // LA2: top + bottom
 	});
 });
 
@@ -99,8 +99,10 @@ describe("isTextureSource", () => {
 		expect(isTextureSource({})).toBe(false);
 	});
 	it("returns false for {src:...}", () => {
-		expect(isTextureSource({
-			src: "https://example.com/image.png"
-		})).toBe(false);
+		expect(
+			isTextureSource({
+				src: "https://example.com/image.png",
+			}),
+		).toBe(false);
 	});
 });

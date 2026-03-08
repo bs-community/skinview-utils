@@ -1,0 +1,20 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"plugins": ["typescript", "oxc"],
+	"categories": {
+		"correctness": "warn",
+		"suspicious": "warn"
+	},
+	"rules": {
+		"typescript/no-non-null-assertion": "off"
+	},
+	"overrides": [
+		{
+			"files": ["test/**"],
+			"rules": {
+				"typescript/no-explicit-any": "off",
+				"typescript/triple-slash-reference": "off"
+			}
+		}
+	]
+}
