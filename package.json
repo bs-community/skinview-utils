@@ -13,16 +13,17 @@
 	},
 	"scripts": {
 		"build": "tsc --declaration --outDir build --sourceMap -p .",
-		"lint": "eslint --ext .ts src test",
+		"lint": "oxlint src test",
+		"format": "oxfmt src test",
+		"format:check": "oxfmt --check src test",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"prepublishOnly": "rimraf build && npm run build"
 	},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^5.9.0",
-		"@typescript-eslint/parser": "^5.9.0",
 		"@vitest/browser-playwright": "^4.0.18",
-		"eslint": "^8.6.0",
+		"oxfmt": "^0.36.0",
+		"oxlint": "^1.51.0",
 		"playwright": "^1.49.0",
 		"rimraf": "^3.0.2",
 		"typescript": "^4.9.5",

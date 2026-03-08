@@ -14,11 +14,13 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v4
       with:
-        node-version: 20
+        node-version: 24
     - name: Install dependencies
       run: npm ci
     - name: Lint
       run: npm run lint
+    - name: Format check
+      run: npm run format:check
     - name: Install Playwright browsers
       run: npx playwright install chromium --with-deps
     - name: Build
