@@ -1,8 +1,8 @@
-/// <reference path="shims.d.ts"/>
+/// <reference path="../vite-env.d.ts" />
 
-import { expect } from "chai";
+import { describe, it, expect } from "vitest";
 
-import { inferModelType, loadSkinToCanvas, loadImage, isTextureSource } from "../src/index";
+import { inferModelType, loadSkinToCanvas, loadImage, isTextureSource } from "../src/index.js";
 
 import skin1_8Default from "./textures/skin-1.8-default-no_hd.png";
 import skin1_8Slim from "./textures/skin-1.8-slim-no_hd.png";
@@ -21,34 +21,34 @@ async function loadSkin(src: string) {
 
 describe("detect model of texture", () => {
 	it("1.8 default", async () =>
-		expect(inferModelType(await loadSkin(skin1_8Default))).to.equal("default")
+		expect(inferModelType(await loadSkin(skin1_8Default))).toBe("default")
 	);
 
 	it("1.8 slim", async () =>
-		expect(inferModelType(await loadSkin(skin1_8Slim))).to.equal("slim")
+		expect(inferModelType(await loadSkin(skin1_8Slim))).toBe("slim")
 	);
 
 	it("old default", async () =>
-		expect(inferModelType(await loadSkin(skinOldDefault))).to.equal("default")
+		expect(inferModelType(await loadSkin(skinOldDefault))).toBe("default")
 	);
 
 	it("1.8 slim blackedge", async () =>
-		expect(inferModelType(await loadSkin(skin1_8SlimBlackedge))).to.equal("slim")
+		expect(inferModelType(await loadSkin(skin1_8SlimBlackedge))).toBe("slim")
 	);
 
 	it("1.8 slim whiteedge", async () =>
-		expect(inferModelType(await loadSkin(skin1_8SlimWhiteedge))).to.equal("slim")
+		expect(inferModelType(await loadSkin(skin1_8SlimWhiteedge))).toBe("slim")
 	);
 });
 
 describe("process skin texture", () => {
 	const expectTransparent = (canvas: HTMLCanvasElement, x0: number, y0: number, w: number, h: number) => {
-		const ctx = canvas.getContext("2d", { willReadFrequently: true })
+		const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
 		const data = ctx!.getImageData(x0, y0, w, h).data;
 		for (let x = 0; x < w; x++) {
 			for (let y = 0; y < h; y++) {
-				expect(data[(y * h + x) * 4 + 3], `pixel (${x0 + x}, ${y0 + y})`).to.equal(0);
+				expect(data[(y * h + x) * 4 + 3], `pixel (${x0 + x}, ${y0 + y})`).toBe(0);
 			}
 		}
 	};
@@ -77,30 +77,30 @@ describe("process skin texture", () => {
 describe("isTextureSource", () => {
 	it("returns true for <img>", () => {
 		const el = document.createElement("img");
-		expect(isTextureSource(el)).to.be.true;
+		expect(isTextureSource(el)).toBe(true);
 	});
 	it("returns true for <video>", () => {
 		const el = document.createElement("video");
-		expect(isTextureSource(el)).to.be.true;
+		expect(isTextureSource(el)).toBe(true);
 	});
 	it("returns true for <canvas>", () => {
 		const el = document.createElement("canvas");
-		expect(isTextureSource(el)).to.be.true;
+		expect(isTextureSource(el)).toBe(true);
 	});
 	it("returns true for ImageBitmap", async () => {
 		const bitmap = await createImageBitmap(await loadSkin(skin1_8Default));
-		expect(isTextureSource(bitmap)).to.be.true;
+		expect(isTextureSource(bitmap)).toBe(true);
 	});
 	it("returns true for OffscreenCanvas", () => {
 		const canvas = new OffscreenCanvas(1, 1);
-		expect(isTextureSource(canvas)).to.be.true;
+		expect(isTextureSource(canvas)).toBe(true);
 	});
 	it("returns false for {}", () => {
-		expect(isTextureSource({})).to.be.false;
+		expect(isTextureSource({})).toBe(false);
 	});
 	it("returns false for {src:...}", () => {
 		expect(isTextureSource({
 			src: "https://example.com/image.png"
-		})).to.be.false;
+		})).toBe(false);
 	});
 });

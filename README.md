@@ -6,3 +6,12 @@ skinview-utils
 [![Gitter Chat](https://img.shields.io/gitter/room/TechnologyAdvice/Stardust.svg?style=flat-square)](https://gitter.im/skinview3d/Lobby)
 
 Utilities for working with Minecraft skins
+
+## Development
+
+```bash
+npm install
+npx playwright install chromium  # Required for tests (browser mode)
+npm run build
+npm test
+```
