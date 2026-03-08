@@ -6,30 +6,21 @@
 	"main": "build/index.js",
 	"scripts": {
 		"build": "tsc --declaration --outDir build --sourceMap -p .",
-		"lint": "eslint --ext .ts src",
-		"test": "npm run lint && karma start karma.conf.cjs",
+		"lint": "eslint --ext .ts src test",
+		"test": "eslint --ext .ts src test && vitest run",
+		"test:watch": "vitest",
 		"prepublishOnly": "rimraf build && npm run build"
 	},
 	"devDependencies": {
-		"@rollup/plugin-commonjs": "^21.0.1",
-		"@rollup/plugin-image": "^2.1.1",
-		"@rollup/plugin-node-resolve": "^13.1.3",
-		"@rollup/plugin-typescript": "^8.3.0",
-		"@types/chai": "^4.3.0",
-		"@types/mocha": "^9.0.0",
 		"@typescript-eslint/eslint-plugin": "^5.9.0",
 		"@typescript-eslint/parser": "^5.9.0",
-		"chai": "^4.3.4",
+		"@vitest/browser-playwright": "^4.0.18",
 		"eslint": "^8.6.0",
-		"karma": "^6.3.10",
-		"karma-chrome-launcher": "^3.1.0",
-		"karma-mocha": "^2.0.1",
-		"karma-rollup-preprocessor": "^7.0.7",
-		"mocha": "^9.1.3",
-		"puppeteer": "^13.0.1",
+		"playwright": "^1.49.0",
 		"rimraf": "^3.0.2",
-		"rollup": "^2.63.0",
-		"typescript": "^4.9.5"
+		"typescript": "^4.9.5",
+		"vite": "^7.3.1",
+		"vitest": "^4.0.18"
 	},
 	"files": [
 		"build"
