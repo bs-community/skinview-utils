@@ -323,20 +323,34 @@ export function loadEarsToCanvasFromSkin(canvas: TextureCanvas, image: TextureSo
   context.drawImage(image, 24 * scale, 0, w, h, 0, 0, w, h);
 }
 
-export function loadArmorToCanvas(canvas: TextureCanvas, layer1Image: TextureSource | null |undefined, layer2Image: TextureSource | null | undefined): void {
+export function loadArmorToCanvas(
+  canvas: TextureCanvas,
+  layer1Image: TextureSource | null | undefined,
+  layer2Image: TextureSource | null | undefined,
+): void {
   if (!layer1Image && !layer2Image) return;
-  
+
   const context = canvas.getContext("2d", { willReadFrequently: true }) as CanvasContext;
   const width = layer1Image ? layer1Image.width : layer2Image!.width;
   const height = layer1Image ? layer1Image.height : layer2Image!.height;
-	if (!width || !height || width !== height*2) {
-		throw new Error(`Bad armor size: ${width}x${height}`);
-	}
-	const scale = computeSkinScale(width);
-	const copyRegion = (sX: number, sY: number, w: number, h: number, dX: number, dY: number): void =>
-  context.drawImage(canvas, sX * scale, sY * scale, w * scale, h * scale, dX * scale, dY * scale, w * scale, h * scale);
-	const clearArea = (x: number, y: number, w: number, h: number): void =>
-  context.clearRect(x * scale, y * scale, w * scale, h * scale);
+  if (!width || !height || width !== height * 2) {
+    throw new Error(`Bad armor size: ${width}x${height}`);
+  }
+  const scale = computeSkinScale(width);
+  const copyRegion = (sX: number, sY: number, w: number, h: number, dX: number, dY: number): void =>
+    context.drawImage(
+      canvas,
+      sX * scale,
+      sY * scale,
+      w * scale,
+      h * scale,
+      dX * scale,
+      dY * scale,
+      w * scale,
+      h * scale,
+    );
+  const clearArea = (x: number, y: number, w: number, h: number): void =>
+    context.clearRect(x * scale, y * scale, w * scale, h * scale);
 
   canvas.width = width;
   canvas.height = width;
