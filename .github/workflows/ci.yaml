@@ -1,17 +1,29 @@
 name: CI
 
-on: [push]
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v4
       with:
-        node-version: 16
-    - name: npm build & test
-      run: |
-        npm install
-        npm run build
-        npm test
+        node-version: 24
+    - name: Install dependencies
+      run: npm ci
+    - name: Lint
+      run: npm run lint
+    - name: Format check
+      run: npm run format:check
+    - name: Install Playwright browsers
+      run: npx playwright install chromium --with-deps
+    - name: Build
+      run: npm run build
+    - name: Test
+      run: npm test
