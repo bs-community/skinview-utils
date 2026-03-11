@@ -2,7 +2,13 @@
 
 import { describe, it, expect } from "vitest";
 
-import { inferModelType, loadSkinToCanvas, loadImage, isTextureSource, loadArmorToCanvas } from "../src/index.js";
+import {
+  inferModelType,
+  loadSkinToCanvas,
+  loadImage,
+  isTextureSource,
+  loadArmorToCanvas,
+} from "../src/index.js";
 
 import skin1_8Default from "./textures/skin-1.8-default-no_hd.png";
 import skin1_8Slim from "./textures/skin-1.8-slim-no_hd.png";
@@ -127,14 +133,16 @@ describe("process armor textures", () => {
       w: number;
       h: number;
       color: { r: number; g: number; b: number };
-    }[]
+    }[],
   ) => {
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
-    
+
     const data = ctx!.getImageData(0, 0, canvas.width, canvas.height).data;
     for (let x = 0; x < canvas.width; x++) {
       for (let y = 0; y < canvas.height; y++) {
-        const group = groups.find(g => x >= g.x0 && x < g.x0 + g.w && y >= g.y0 && y < g.y0 + g.h);
+        const group = groups.find(
+          (g) => x >= g.x0 && x < g.x0 + g.w && y >= g.y0 && y < g.y0 + g.h,
+        );
         const i = (y * canvas.width + x) * 4;
         const pixel = { r: data[i], g: data[i + 1], b: data[i + 2], a: data[i + 3] };
         if (group) {
@@ -156,9 +164,23 @@ describe("process armor textures", () => {
       { name: "chestplate-body", x0: 20, y0: 32, w: 16, h: 4, color: { r: 0, g: 0, b: 255 } }, // top/bottom
       { name: "chestplate-body", x0: 16, y0: 36, w: 24, h: 12, color: { r: 0, g: 0, b: 255 } }, // right/front/left/back
       { name: "chestplate-left-arm", x0: 52, y0: 48, w: 8, h: 4, color: { r: 255, g: 255, b: 0 } }, // top/bottom
-      { name: "chestplate-left-arm", x0: 48, y0: 52, w: 16, h: 12, color: { r: 255, g: 255, b: 0 } }, // right/front/left/back
+      {
+        name: "chestplate-left-arm",
+        x0: 48,
+        y0: 52,
+        w: 16,
+        h: 12,
+        color: { r: 255, g: 255, b: 0 },
+      }, // right/front/left/back
       { name: "chestplate-right-arm", x0: 44, y0: 32, w: 8, h: 4, color: { r: 255, g: 255, b: 0 } }, // top/bottom
-      { name: "chestplate-right-arm", x0: 40, y0: 36, w: 16, h: 12, color: { r: 255, g: 255, b: 0 } }, // right/front/left/back
+      {
+        name: "chestplate-right-arm",
+        x0: 40,
+        y0: 36,
+        w: 16,
+        h: 12,
+        color: { r: 255, g: 255, b: 0 },
+      }, // right/front/left/back
       { name: "leggings-body", x0: 20, y0: 16, w: 16, h: 4, color: { r: 255, g: 0, b: 255 } }, // top/bottom
       { name: "leggings-body", x0: 16, y0: 20, w: 24, h: 12, color: { r: 255, g: 0, b: 255 } }, // right/front/left/back
       { name: "leggings-left-leg", x0: 4, y0: 16, w: 8, h: 4, color: { r: 0, g: 255, b: 255 } }, // top/bottom
